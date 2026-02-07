@@ -1,0 +1,23 @@
+<!-- Bitta post -->
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <title>{{ post.title }}</title>
+</head>
+<body>
+
+<h1>{{ post.title }}</h1>
+
+<p>{{ post.content }}</p>
+
+<hr>
+
+<a href="{% url 'post_update' post.pk %}">✏ Tahrirlash</a>
+|
+<a href="{% url 'post_delete' post.pk %}">🗑 O'chirish</a>
+|
+<a href="{% url 'post_list' %}">⬅ Orqaga</a>
+
+</body>
+</html>

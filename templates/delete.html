@@ -1,0 +1,23 @@
+<!-- O'chirish -->
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <title>Delete Post</title>
+</head>
+<body>
+
+<h1>Postni o'chirish</h1>
+
+<p>Shu postni haqiqatan ham o'chirib yubormoqchimisiz?</p>
+<b>{{ post.title }}</b>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Tasdiqlash</button>
+</form>
+
+<a href="{% url 'post_detail' post.pk %}">Bekor qilish</a>
+
+</body>
+</html>
