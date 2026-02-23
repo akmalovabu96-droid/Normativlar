@@ -1,23 +1,33 @@
 <!-- O'chirish -->
 
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-    <title>Delete Post</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-<h1>Postni o'chirish</h1>
+{% block content %}
 
-<p>Shu postni haqiqatan ham o'chirib yubormoqchimisiz?</p>
-<b>{{ post.title }}</b>
+<div class="card shadow">
+
+<div class="card-body">
+
+<h3>Delete Post</h3>
+
+<p>Are you sure?</p>
 
 <form method="post">
+
     {% csrf_token %}
-    <button type="submit">Tasdiqlash</button>
+
+    <button class="btn btn-danger">
+        Yes Delete
+    </button>
+
+    <a href="{% url 'post_list' %}" class="btn btn-secondary">
+        Cancel
+    </a>
+
 </form>
 
-<a href="{% url 'post_detail' post.pk %}">Bekor qilish</a>
+</div>
 
-</body>
-</html>
+</div>
+
+{% endblock %}

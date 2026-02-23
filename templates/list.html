@@ -1,32 +1,37 @@
 <!-- Barcha postlar -->
 
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-    <title>All Posts</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-<h1>Barcha Postlar</h1>
+{% block content %}
 
-<a href="{% url 'post_create' %}">➕ Yangi post yaratish</a>
-<hr>
+<h2 class="mb-4">All Posts</h2>
 
 {% for post in posts %}
-    <h2>
-        <a href="{% url 'post_detail' post.pk %}">
-            {{ post.title }}
+
+<div class="card mb-3 shadow-sm">
+
+    <div class="card-body">
+
+        <h4>{{ post.title }}</h4>
+
+        <p>{{ post.content|truncatewords:20 }}</p>
+
+        <a href="{% url 'post_detail' post.pk %}" class="btn btn-primary btn-sm">
+            View
         </a>
-    </h2>
 
-    <a href="{% url 'post_update' post.pk %}">✏ Tahrirlash</a>
-    |
-    <a href="{% url 'post_delete' post.pk %}">🗑 O'chirish</a>
+        <a href="{% url 'post_update' post.pk %}" class="btn btn-warning btn-sm">
+            Edit
+        </a>
 
-    <hr>
-{% empty %}
-    <p>Hozircha bu yer bo'sh.</p>
+        <a href="{% url 'post_delete' post.pk %}" class="btn btn-danger btn-sm">
+            Delete
+        </a>
+
+    </div>
+
+</div>
+
 {% endfor %}
 
-</body>
-</html>
+{% endblock %}

@@ -1,21 +1,27 @@
-<!-- Post yaratish -->
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-    <title>Create Post</title>
-</head>
-<body>
+{% block content %}
 
-<h1>Yangi post yaratish</h1>
+<div class="card shadow">
+
+<div class="card-body">
+
+<h3>Create / Update Post</h3>
 
 <form method="post">
+
     {% csrf_token %}
+
     {{ form.as_p }}
-    <button type="submit">Qo'shish</button>
+
+    <button class="btn btn-success">
+        Save
+    </button>
+
 </form>
 
-<a href="{% url 'post_list' %}">⬅ Orqaga</a>
+</div>
 
-</body>
-</html>
+</div>
+
+{% endblock %}

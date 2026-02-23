@@ -1,23 +1,25 @@
-<!-- Bitta post -->
+<{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-    <title>{{ post.title }}</title>
-</head>
-<body>
+{% block content %}
 
-<h1>{{ post.title }}</h1>
+<div class="card shadow">
 
-<p>{{ post.content }}</p>
+    <div class="card-body">
 
-<hr>
+        <h2>{{ post.title }}</h2>
 
-<a href="{% url 'post_update' post.pk %}">✏ Tahrirlash</a>
-|
-<a href="{% url 'post_delete' post.pk %}">🗑 O'chirish</a>
-|
-<a href="{% url 'post_list' %}">⬅ Orqaga</a>
+        <p>{{ post.content }}</p>
 
-</body>
-</html>
+        <a href="{% url 'post_update' post.pk %}" class="btn btn-warning">
+            Edit
+        </a>
+
+        <a href="{% url 'post_list' %}" class="btn btn-secondary">
+            Back
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

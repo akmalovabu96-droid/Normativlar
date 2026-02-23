@@ -1,22 +1,29 @@
 <!-- Postni yangilash -->
 
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-    <title>Edit Post</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-<h1>Postni tahrirlash</h1>
+{% block content %}
+
+<div class="card shadow">
+
+<div class="card-body">
+
+<h3>Create / Update Post</h3>
 
 <form method="post">
+
     {% csrf_token %}
+
     {{ form.as_p }}
-    <button type="submit">Yangilash</button>
+
+    <button class="btn btn-success">
+        Save
+    </button>
+
 </form>
 
-<p><a href="{% url 'post_detail' form.instance.pk %}">Bekor qilish</a></p>
+</div>
 
+</div>
 
-</body>
-</html>
+{% endblock %}
