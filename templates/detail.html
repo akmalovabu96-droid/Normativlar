@@ -1,4 +1,4 @@
-<{% extends 'base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
 
@@ -11,11 +11,11 @@
         <p>{{ post.content }}</p>
 
         <a href="{% url 'post_update' post.pk %}" class="btn btn-warning">
-            Edit
+            Tahrirlash
         </a>
 
         <a href="{% url 'post_list' %}" class="btn btn-secondary">
-            Back
+            Orqaga
         </a>
 
     </div>

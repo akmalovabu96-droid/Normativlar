@@ -10,18 +10,18 @@
 
 <h3>Delete Post</h3>
 
-<p>Are you sure?</p>
+<p>Rostdan ham o'chirib tashlamoqchimisiz?</p>
 
 <form method="post">
 
     {% csrf_token %}
 
     <button class="btn btn-danger">
-        Yes Delete
+        O'chirish
     </button>
 
     <a href="{% url 'post_list' %}" class="btn btn-secondary">
-        Cancel
+        Bekor qilish
     </a>
 
 </form>

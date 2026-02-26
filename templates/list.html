@@ -4,9 +4,9 @@
 
 {% block content %}
 
-<h2 class="mb-4">All Posts</h2>
+<h2 class="mb-4">Barcha Postlar</h2>
 
-{% for post in posts %}
+{% for post in page_obj %}
 
 <div class="card mb-3 shadow-sm">
 
@@ -17,15 +17,15 @@
         <p>{{ post.content|truncatewords:20 }}</p>
 
         <a href="{% url 'post_detail' post.pk %}" class="btn btn-primary btn-sm">
-            View
+            Ko'rish
         </a>
 
         <a href="{% url 'post_update' post.pk %}" class="btn btn-warning btn-sm">
-            Edit
+            Tahrirlash
         </a>
 
         <a href="{% url 'post_delete' post.pk %}" class="btn btn-danger btn-sm">
-            Delete
+            O'chirish
         </a>
 
     </div>
@@ -33,5 +33,57 @@
 </div>
 
 {% endfor %}
+
+    <nav>
+
+<ul class="pagination justify-content-center">
+
+{% if page_obj.has_previous %}
+
+
+
+
+<li class="page-item">
+
+<a class="page-link"
+href="?page={{ page_obj.previous_page_number }}&q={{ request.GET.q }}">
+Oldingi
+</a>
+
+</li>
+
+{% endif %}
+
+
+<li class="page-item active">
+
+<span class="page-link">
+
+Sahifa {{ page_obj.number }}
+dan {{ page_obj.paginator.num_pages }} gacha
+
+</span>
+
+</li>
+
+
+
+{% if page_obj.has_next %}
+
+<li class="page-item">
+
+<a class="page-link"
+href="?page={{ page_obj.next_page_number }}&q={{ request.GET.q }}">
+Keyingi
+</a>
+
+</li>
+
+
+{% endif %}
+
+</ul>
+
+</nav>
 
 {% endblock %}
