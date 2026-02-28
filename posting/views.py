@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post
-from .forms import PostForm
+from .forms import PostForm, LoginForm, RegisterForm
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.contrib.auth import login, authenticate, logout
 
 def post_list(request):
 
@@ -58,5 +59,59 @@ def post_delete(request, pk):
         return redirect('post_list')
     return render(request, 'delete.html', {'post': post})
 
+
+def register_view(request):
+
+    form = RegisterForm(request.POST or None)
+
+    if form.is_valid():
+
+        form.save()
+
+        return redirect("login")
+
+    return render(request, "register.html", {
+        "form": form
+    })
+
+def login_view(request):
+
+    form = LoginForm(request.POST or None)
+
+    if form.is_valid():
+
+        username = form.cleaned_data["username"]
+        password = form.cleaned_data["password"]
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password
+        )
+
+        if user is not None:
+
+            login(request, user)
+
+            return redirect("post_list")
+
+        else:
+
+            form.add_error(
+                None,
+                "Username yoki password noto‘g‘ri"
+            )
+
+
+    return render(request, "login.html", {
+        "form": form
+    })
+
+
+def logout_view(request):
+
+    logout(request)
+
+    return redirect("login")
 
 
