@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post
+from .models import Post, Comment
 from .forms import PostForm, LoginForm, RegisterForm
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -34,6 +34,20 @@ def post_list(request):
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     return render(request, 'detail.html', {'post': post})
+
+@login_required
+def add_comment(request, id):
+    post = get_object_or_404(Post, id=id)
+
+    if request.method == "POST":
+        text = request.POST.get("text")
+
+        if text:
+            Comment.objects.create(
+                post=post,
+                user=request.user,
+                text=text
+            )
 
 @login_required
 def post_create(request):
