@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post, Comment
+from .models import Post
+# from .models import Profile
 from .forms import PostForm, LoginForm, RegisterForm
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth import login, authenticate, logout
 from .utils import login_required
+from django.contrib.auth.decorators import permission_required
 
 def post_list(request):
 
@@ -35,21 +37,7 @@ def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     return render(request, 'detail.html', {'post': post})
 
-@login_required
-def add_comment(request, id):
-    post = get_object_or_404(Post, id=id)
-
-    if request.method == "POST":
-        text = request.POST.get("text")
-
-        if text:
-            Comment.objects.create(
-                post=post,
-                user=request.user,
-                text=text
-            )
-
-@login_required
+@permission_required('posting.add_post', raise_exception=True)
 def post_create(request):
     form = PostForm(request.POST or None)
     if form.is_valid():
@@ -57,7 +45,7 @@ def post_create(request):
         return redirect('post_list')
     return render(request, 'create.html', {'form': form})
 
-@login_required
+@permission_required('posting.change_post', raise_exception=True)
 def post_update(request, pk):
     post = get_object_or_404(Post, pk=pk)
     form = PostForm(request.POST or None, instance=post)
@@ -66,13 +54,31 @@ def post_update(request, pk):
         return redirect('post_detail', pk=pk)
     return render(request, 'update.html', {'form': form})
 
-@login_required
+
+@permission_required('posting.delete_post', raise_exception=True)
 def post_delete(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == 'POST':
         post.delete()
         return redirect('post_list')
     return render(request, 'delete.html', {'post': post})
+
+
+# def edit_profile(request):
+#     profile = request.user.profile
+#     if request.method == 'POST':
+#         form = ProfileForm(request.POST, request.FILES, instance=profile)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('profile')  # profil page url name
+#     else:
+#         form = ProfileForm(instance=profile)
+#     return render(request, 'edit_profile.html', {'form': form})
+#
+#
+# def profile_view(request):
+#     profile, created = Profile.objects.get_or_create(user=request.user)
+#     return render(request, 'profile.html', {'profile': profile})
 
 
 def register_view(request):

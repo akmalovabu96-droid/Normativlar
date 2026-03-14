@@ -46,11 +46,13 @@ Chiqish
 
 </form>
 
-    {% if user.is_authenticated %}
+    {% if perms.posting.add_post %}
         <a href="{% url 'post_create' %}" class="btn btn-success">
             + Post Yaratish
         </a>
     {% endif %}
+
+
     </div>
 </nav>
 

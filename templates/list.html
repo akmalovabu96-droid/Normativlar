@@ -20,16 +20,16 @@
             Ko'rish
         </a>
 
-        {% if user.is_authenticated %}
-
+        {% if perms.posting.change_post %}
             <a href="{% url 'post_update' post.pk %}" class="btn btn-warning btn-sm">
                 Tahrirlash
             </a>
+        {% endif %}
 
+        {% if perms.posting.delete_post %}
             <a href="{% url 'post_delete' post.pk %}" class="btn btn-danger btn-sm">
                 O'chirish
             </a>
-
         {% endif %}
 
     </div>

@@ -10,7 +10,7 @@
 
         <p>{{ post.content }}</p>
 
-        {% if user.is_authenticated %}
+        {% if perms.posting.change_post %}
             <a href="{% url 'post_update' post.pk %}" class="btn btn-warning">
                 Tahrirlash
             </a>
