@@ -8,6 +8,10 @@
 
         <h2>{{ post.title }}</h2>
 
+        {% if post.image %}
+<img src="{{ post.image.url }}" class="img-fluid mb-3">
+        {% endif %}
+
         <p>{{ post.content }}</p>
 
         {% if perms.posting.change_post %}

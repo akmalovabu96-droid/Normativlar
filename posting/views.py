@@ -39,7 +39,7 @@ def post_detail(request, pk):
 
 @permission_required('posting.add_post', raise_exception=True)
 def post_create(request):
-    form = PostForm(request.POST or None)
+    form = PostForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         form.save()
         return redirect('post_list')
@@ -48,7 +48,7 @@ def post_create(request):
 @permission_required('posting.change_post', raise_exception=True)
 def post_update(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    form = PostForm(request.POST or None, instance=post)
+    form = PostForm(request.POST or None, request.FILES or None, instance=post)
     if form.is_valid():
         form.save()
         return redirect('post_detail', pk=pk)

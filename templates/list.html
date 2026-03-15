@@ -12,6 +12,10 @@
 
     <div class="card-body">
 
+        {% if post.image %}
+<img src="{{ post.image.url }}" class="card-img-top">
+        {% endif %}
+
         <h4>{{ post.title }}</h4>
 
         <p>{{ post.content|truncatewords:20 }}</p>
