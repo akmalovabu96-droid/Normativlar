@@ -7,6 +7,16 @@ from django.db.models import Q
 from django.contrib.auth import login, authenticate, logout
 from .utils import login_required
 from django.contrib.auth.decorators import permission_required
+from django.core.mail import send_mail
+from django.contrib.auth.models import User
+from .models import PasswordResetCode
+from .forms import ForgotPasswordForm
+from django.contrib.auth.hashers import make_password
+from .forms import ResetPasswordForm
+from django.utils import timezone
+from datetime import timedelta
+
+
 
 def post_list(request):
 
@@ -79,6 +89,75 @@ def post_delete(request, pk):
 # def profile_view(request):
 #     profile, created = Profile.objects.get_or_create(user=request.user)
 #     return render(request, 'profile.html', {'profile': profile})
+
+
+def forgot_password(request):
+    form = ForgotPasswordForm(request.POST or None)
+
+    if form.is_valid():
+        username = form.cleaned_data['username']
+
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            form.add_error("username", "Bunday user yo‘q")
+            return render(request, 'forgot_password.html', {'form': form})
+
+        code = PasswordResetCode.generate_code()
+
+        PasswordResetCode.objects.create(
+            user=user,
+            code=code,
+            expired_at=timezone.now() + timedelta(minutes=2)
+        )
+
+        # EMAIL YUBORISH
+        send_mail(
+            "Yangi parol",
+            f"Sizning kodingiz: {code}\nMuddati: 2 daqiqa!",
+            None,
+            [user.email],
+        )
+
+        request.session['reset_user'] = user.pk
+
+        return redirect('reset')
+
+    return render(request, 'forgot_password.html', {'form': form})
+
+
+def reset_password(request):
+    form = ResetPasswordForm(request.POST or None)
+
+    user_id = request.session.get('reset_user')
+
+    if not user_id:
+        return redirect('forgot')
+
+    if form.is_valid():
+        code = form.cleaned_data['code']
+        new_password = form.cleaned_data['new_password']
+
+        try:
+            record = PasswordResetCode.objects.filter(
+                user_id=user_id,
+                code=code
+            ).latest('created_at')
+        except PasswordResetCode.DoesNotExist:
+            form.add_error("code", "Noto‘g‘ri kod!")
+            return render(request, 'reset_password.html', {'form': form})
+
+        # PAROLNI YANGILASH
+        user = record.user
+        user.password = make_password(new_password)
+        user.save()
+
+        # Kodni o‘chiramiz
+        record.delete()
+
+        return redirect('login')
+
+    return render(request, 'reset_password.html', {'form': form})
 
 
 def register_view(request):

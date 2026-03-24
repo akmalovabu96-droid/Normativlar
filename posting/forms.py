@@ -63,6 +63,26 @@ class PostForm(forms.ModelForm):
         fields = ['title', 'content', 'image']
 
 
+class ForgotPasswordForm(forms.Form):
+    username = forms.CharField(max_length=150)
+
+
+class ResetPasswordForm(forms.Form):
+    code = forms.CharField(max_length=6)
+    new_password = forms.CharField(widget=forms.PasswordInput)
+    confirm_password = forms.CharField(widget=forms.PasswordInput)
+
+    def clean(self):
+        cleaned = super().clean()
+        p1 = cleaned.get("new_password")
+        p2 = cleaned.get("confirm_password")
+
+        if p1 != p2:
+            raise forms.ValidationError("Parollar mos emas!")
+
+        return cleaned
+
+
 # class ProfileForm(forms.ModelForm):
 #     class Meta:
 #         model = Profile
