@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post
 # from .models import Profile
@@ -116,7 +117,7 @@ def forgot_password(request):
             "Yangi parol",
             f"Sizning kodingiz: {code}\nMuddati: 2 daqiqa!",
             None,
-            [user.email],
+            [settings.EMAIL_HOST_USER]
         )
 
         request.session['reset_user'] = user.pk
