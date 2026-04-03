@@ -148,12 +148,18 @@ def reset_password(request):
             form.add_error("code", "Noto‘g‘ri kod!")
             return render(request, 'reset_password.html', {'form': form})
 
+        # Muddat tekshiruvi
+        if record.expired_at < timezone.now():
+            form.add_error("code", "Kod muddati tugagan!")
+            record.delete()  # eski kodni o‘chiramiz
+            return redirect('forgot')
+
         # PAROLNI YANGILASH
         user = record.user
         user.password = make_password(new_password)
         user.save()
 
-        # Kodni o‘chiramiz
+        # Kodni o‘chiramiz (bir martalik uchun)
         record.delete()
 
         return redirect('login')
