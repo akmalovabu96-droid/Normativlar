@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post
+from .models import Post, Comment
 # from .models import Profile
 from .forms import PostForm, LoginForm, RegisterForm
 from django.core.paginator import Paginator
@@ -46,7 +46,8 @@ def post_list(request):
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    return render(request, 'detail.html', {'post': post})
+    comments = get_object_or_404(Comment) # post ga tegishli commentlar
+    return render(request, 'detail.html', {'post': post, 'comment': comments})
 
 @permission_required('posting.add_post', raise_exception=True)
 def post_create(request):
@@ -90,6 +91,15 @@ def post_delete(request, pk):
 # def profile_view(request):
 #     profile, created = Profile.objects.get_or_create(user=request.user)
 #     return render(request, 'profile.html', {'profile': profile})
+
+@login_required
+def add_comment(request, id):
+    post = get_object_or_404(Post, id=id)
+    if request.method == 'POST':
+        text = request.POST.get('text')
+        if text:
+            Comment.objects.create(post=post, user=request.user, text=text)
+    return redirect('post_detail')
 
 
 def forgot_password(request):

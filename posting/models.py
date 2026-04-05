@@ -39,3 +39,10 @@ class PasswordResetCode(models.Model):
     def is_expired(self):
         return timezone.now() > self.expired_at
 
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, related_name='comment', on_delete=models.CASCADE)       # ForeignKey → Post, related_name='comments'
+    user = models.ForeignKey(User, on_delete=models.CASCADE)      # ForeignKey → User
+    text = models.TextField()       # TextField
+    created_at = models.DateTimeField(auto_now_add=True)# DateTimeField auto
+
